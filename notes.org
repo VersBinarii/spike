@@ -1,0 +1,39 @@
+* Design notes
+
+** Number blocks
+Number blocks and DDIs are going to be treated interchangeably.
+Bloc are allowed only in powers of 10 (1, 10, 100) etc. 
+If 3 number are requested then 3 blocks of 1 are created, for 32 numbers 3 blocks of 10 
+and 2 blocks of 1 are created etc... 
+
+
+
+** API
+
+*** Assumptions
+Each API endpoint will support pagination (where applicable).
+
+*** Number
+GET numbers - list all
+GET numbers/:id - info on number id
+POST numbers - create number
+PUT numbers/:id - Update number
+DELETE numbers/:id
+GET numbers/new - find new available number
+GET numbers/:id/status - show the status of the number
+GET numbers/search - lookup numbers
+
+*** MNA
+GET mna - list all MNAs
+GET mna/:id - retrive single MNA
+GET mna/:id/numbers - list all numbers for this MNA
+POST mna - create new MNA
+PUT mna/:id - update MNA
+DELETE mna/:id - delete MNA
+
+*** RSP
+GET rsp - list all RSPs
+*** Subscriber
+
+*** Porting
+
