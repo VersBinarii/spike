@@ -1,4 +1,6 @@
+pub mod mna;
 pub mod number;
+pub mod pagination;
 
 use actix::prelude::*;
 use diesel::prelude::*;
