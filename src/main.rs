@@ -12,7 +12,7 @@ mod models;
 mod schema;
 mod utils;
 
-use crate::controllers::AppState;
+use crate::controllers::{mna, number, AppState};
 
 fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
@@ -32,15 +32,24 @@ fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::default())
             .service(
                 web::resource("/numbers")
-                    .route(web::get().to_async(controllers::list_numbers))
-                    .route(
-                        web::post().to_async(controllers::create_new_number),
-                    ),
+                    .route(web::get().to_async(number::list_numbers))
+                    .route(web::post().to_async(number::create_new_number)),
             )
             .service(
                 web::resource("/numbers/{id}")
-                    .route(web::get().to_async(controllers::show_number))
-                    .route(web::put().to_async(controllers::update_number))
+                    .route(web::get().to_async(number::show_number))
+                    .route(web::put().to_async(number::update_number))
+                    .route(web::delete().to_async(controllers::dummy)),
+            )
+            .service(
+                web::resource("/mna")
+                    .route(web::get().to_async(mna::list_mna))
+                    .route(web::post().to_async(controllers::dummy)),
+            )
+            .service(
+                web::resource("/mna/{id}")
+                    .route(web::get().to_async(mna::show_mna))
+                    .route(web::put().to_async(controllers::dummy))
                     .route(web::delete().to_async(controllers::dummy)),
             )
             .default_service(web::route().to(|| HttpResponse::NotFound()))
