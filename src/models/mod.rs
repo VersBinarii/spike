@@ -122,7 +122,7 @@ pub struct NumberStatus {
 pub struct Mna {
     mna_id: i32,
     area_code: String,
-    digits: i8,
+    digits: i32,
     mna: String,
     towns: String,
     area: String,
