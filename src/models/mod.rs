@@ -21,7 +21,8 @@ pub struct NewNumber {
     ndd: bool,
 }
 
-#[derive(Debug, Queryable, Serialize)]
+#[derive(Debug, Queryable, Associations, Serialize)]
+#[belongs_to(Mna)]
 pub struct Number {
     number_id: i32,
     number: String,
@@ -118,12 +119,48 @@ pub struct NumberStatus {
     number_status: String,
 }
 
-#[derive(Queryable, Serialize, Deserialize)]
+#[derive(Debug, Insertable, AsChangeset, Deserialize)]
+#[table_name = "mna"]
+#[primary_key(mna_id)]
+pub struct NewMna {
+    area_code: String,
+    digits: i32,
+    description: String,
+    towns: String,
+    area: String,
+}
+
+#[derive(Debug, Queryable, Serialize, Associations, Deserialize)]
 pub struct Mna {
     mna_id: i32,
     area_code: String,
     digits: i32,
-    mna: String,
+    description: String,
     towns: String,
     area: String,
+}
+
+#[derive(Debug, Queryable, Serialize)]
+pub struct User {
+    pub username: String,
+    pub password: String,
+    pub email: String,
+}
+
+#[derive(Debug, Queryable, Deserialize)]
+pub struct LoginUser {
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Debug, Queryable, Deserialize)]
+pub struct LogoutUser {
+    pub username: String,
+}
+
+#[derive(Debug, Queryable, Insertable, Deserialize, Serialize)]
+pub struct Token {
+    token_id: String,
+    username: String,
+    expiry: NaiveDateTime,
 }
