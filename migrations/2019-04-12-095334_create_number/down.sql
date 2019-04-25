@@ -10,3 +10,4 @@ DROP TABLE subscribers;
 DROP TABLE address cascade;
 DROP TABLE porting_status;
 DROP TABLE routing_prefix;
+DROP TABLE users;

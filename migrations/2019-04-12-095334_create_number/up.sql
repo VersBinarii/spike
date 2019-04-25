@@ -96,6 +96,18 @@ CREATE TABLE portings(
 	   comments TEXT
 );
 
+CREATE TABLE users(
+	   username TEXT NOT NULL PRIMARY KEY,
+	   password TEXT NOT NULL,
+	   email TEXT NOT NULL
+);
+
+CREATE TABLE tokens(
+	   token_id TEXT PRIMARY KEY NOT NULL,
+	   username TEXT NOT NULL,
+	   expiry timestamp WITH TIME ZONE NOT NULL
+);
+
 
 INSERT INTO number_type(number_type_id, number_type_name) VALUES(1, 'GEO');
 INSERT INTO number_status(number_status_id, number_status_name)

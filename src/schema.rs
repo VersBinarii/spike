@@ -117,6 +117,22 @@ table! {
     }
 }
 
+table! {
+    tokens (token_id) {
+        token_id -> Text,
+        username -> Text,
+        expiry -> Timestamptz,
+    }
+}
+
+table! {
+    users (username) {
+        username -> Text,
+        password -> Text,
+        email -> Text,
+    }
+}
+
 joinable!(numbers -> mna (mna_id));
 joinable!(numbers -> number_blocks (numberblock_id));
 joinable!(numbers -> number_status (number_status_id));
@@ -142,4 +158,6 @@ allow_tables_to_appear_in_same_query!(
     routing_prefix,
     rsp,
     subscribers,
+    tokens,
+    users,
 );
