@@ -1,3 +1,5 @@
+use actix_web::{error::ResponseError, http::StatusCode, web::HttpResponse};
+
 #[derive(Debug)]
 pub enum SpikeError {
     DatabaseConnectionError(r2d2::Error),
@@ -39,5 +41,20 @@ impl std::error::Error for SpikeError {
 impl std::convert::From<r2d2::Error> for SpikeError {
     fn from(error: r2d2::Error) -> Self {
         SpikeError::DatabaseConnectionError(error)
+    }
+}
+
+impl std::convert::From<diesel::result::Error> for SpikeError {
+    fn from(error: diesel::result::Error) -> Self {
+        SpikeError::DatabaseQueryError(error)
+    }
+}
+
+impl ResponseError for SpikeError {
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::with_body(
+            StatusCode::BAD_REQUEST,
+            format!("{}", self).into(),
+        )
     }
 }
