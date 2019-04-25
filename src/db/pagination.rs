@@ -12,6 +12,13 @@ pub struct PaginateQuery {
     pub per_page: Option<i64>,
 }
 
+#[derive(Debug, Clone, Copy, Serialize)]
+pub struct PaginateResponse {
+    pub page: i64,
+    pub per_page: i64,
+    pub total_pages: i64,
+}
+
 pub trait Paginate: Sized {
     fn paginate(self, page: i64) -> Paginated<Self>;
 }

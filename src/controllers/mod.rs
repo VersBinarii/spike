@@ -1,5 +1,6 @@
 pub mod mna;
 pub mod number;
+pub mod session;
 
 use actix::prelude::Addr;
 use actix_web::{web, Error as ActixErr, HttpResponse};
@@ -15,7 +16,10 @@ pub fn dummy(
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
     state
         .db
-        .send(db::number::FetchNumbers)
+        .send(db::number::FetchNumbers {
+            page: 1,
+            per_page: 10,
+        })
         .from_err()
         .and_then(move |res| match res {
             Ok(numbers) => Ok(HttpResponse::Ok().json(numbers)),

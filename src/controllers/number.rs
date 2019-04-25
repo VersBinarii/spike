@@ -1,23 +1,28 @@
-use actix::prelude::Addr;
 use actix_web::{web, Error as ActixErr, HttpResponse};
 use futures::Future;
 
 use std::error::Error;
 
 use crate::db;
-use crate::models::*;
+use crate::models::NewNumber;
 use crate::AppState;
 
 pub fn list_numbers(
+    q: web::Query<db::pagination::PaginateQuery>,
     state: web::Data<AppState>,
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
     state
         .db
-        .send(db::number::FetchNumbers)
+        .send(db::number::FetchNumbers {
+            page: q.page.unwrap_or(1),
+            per_page: q.per_page.unwrap_or(10),
+        })
         .from_err()
         .and_then(move |res| match res {
             Ok(numbers) => Ok(HttpResponse::Ok().json(numbers)),
-            Err(_) => Ok(HttpResponse::InternalServerError().into()),
+            Err(e) => {
+                Ok(HttpResponse::InternalServerError().json(e.description()))
+            }
         })
 }
 

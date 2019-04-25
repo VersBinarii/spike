@@ -1,6 +1,8 @@
 pub mod mna;
 pub mod number;
 pub mod pagination;
+pub mod token;
+pub mod user;
 
 use actix::prelude::*;
 use diesel::prelude::*;

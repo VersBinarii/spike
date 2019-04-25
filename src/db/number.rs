@@ -1,6 +1,7 @@
 use actix::prelude::*;
 use diesel::prelude::*;
 
+use crate::db::pagination::*;
 use crate::db::DbExecutor;
 use crate::models;
 use crate::utils::SpikeError;
@@ -38,22 +39,30 @@ impl Handler<FetchNumber> for DbExecutor {
     }
 }
 
-pub struct FetchNumbers;
+pub struct FetchNumbers {
+    pub page: i64,
+    pub per_page: i64,
+}
 
 impl Message for FetchNumbers {
-    type Result = Result<Vec<models::Number>, SpikeError>;
+    type Result = Result<(Vec<models::Number>, i64), SpikeError>;
 }
 
 impl Handler<FetchNumbers> for DbExecutor {
-    type Result = Result<Vec<models::Number>, SpikeError>;
+    type Result = Result<(Vec<models::Number>, i64), SpikeError>;
     fn handle(
         &mut self,
-        _: FetchNumbers,
+        msg: FetchNumbers,
         _: &mut Self::Context,
     ) -> Self::Result {
         use crate::schema::numbers::dsl::*;
 
-        match numbers.load::<models::Number>(&self.pool.get()?) {
+        match numbers
+            .select(numbers::all_columns())
+            .paginate(msg.page)
+            .per_page(msg.per_page)
+            .load_and_count_pages::<models::Number>(&*self.pool.get()?)
+        {
             Ok(nums) => Ok(nums),
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),
         }
@@ -108,7 +117,7 @@ impl Handler<UpdateNumber> for DbExecutor {
             .set(&msg.number)
             .get_result(&self.pool.get()?)
         {
-            Ok(inserted_number) => Ok(inserted_number),
+            Ok(updated_number) => Ok(updated_number),
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),
         }
     }
