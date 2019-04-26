@@ -65,13 +65,29 @@ pub struct PortingStatus {
     porting_status: String,
 }
 
+#[derive(Debug, Insertable, AsChangeset, Deserialize)]
+#[table_name = "subscribers"]
+#[primary_key(subscriber_id)]
+pub struct NewSubscriber {
+    address_id: Option<i32>,
+    rsp_id: Option<i32>,
+    name: String,
+    accountid: String,
+    is_business: bool,
+    premise_id: Option<String>,
+    eircode_id: Option<String>,
+    ard_id: Option<String>,
+    first_name: Option<String>,
+    last_name: Option<String>,
+}
+
 #[derive(Queryable, Serialize, Deserialize)]
 pub struct Subscriber {
     subscriber_id: i32,
     address_id: Option<i32>,
-    rsp_id: i32,
+    rsp_id: Option<i32>,
     name: String,
-    accountid: Option<String>,
+    accountid: String,
     is_business: bool,
     premise_id: Option<String>,
     eircode_id: Option<String>,
@@ -97,6 +113,20 @@ pub struct Rsp {
     account: Option<String>,
 }
 
+#[derive(Debug, Insertable, AsChangeset, Deserialize)]
+#[table_name = "address"]
+#[primary_key(address_id)]
+pub struct NewAddress {
+    address_line_1: Option<String>,
+    address_line_2: Option<String>,
+    county: Option<String>,
+    city: Option<String>,
+    postal_code: Option<String>,
+    business_name: Option<String>,
+    latitude: Option<String>,
+    longitude: Option<String>,
+}
+
 #[derive(Queryable, Serialize, Deserialize)]
 pub struct Address {
     address_id: i32,
@@ -106,8 +136,8 @@ pub struct Address {
     city: Option<String>,
     postal_code: Option<String>,
     business_name: Option<String>,
-    latitude: Option<f32>,
-    longitude: Option<f32>,
+    latitude: Option<String>,
+    longitude: Option<String>,
 }
 
 #[derive(Queryable, Serialize, Deserialize)]

@@ -32,7 +32,7 @@ CREATE TABLE address(
 	   address_id SERIAL PRIMARY KEY,
 	   address_line_1 TEXT DEFAULT '',
 	   address_line_2 TEXT DEFAULT '',
-	   country TEXT DEFAULT '',
+	   county TEXT DEFAULT '',
 	   city TEXT DEFAULT '',
 	   postal_code TEXT DEFAULT '',
 	   business_name TEXT DEFAULT '',

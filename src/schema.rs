@@ -3,7 +3,7 @@ table! {
         address_id -> Int4,
         address_line_1 -> Nullable<Text>,
         address_line_2 -> Nullable<Text>,
-        country -> Nullable<Text>,
+        county -> Nullable<Text>,
         city -> Nullable<Text>,
         postal_code -> Nullable<Text>,
         business_name -> Nullable<Text>,

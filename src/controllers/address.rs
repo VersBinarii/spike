@@ -4,78 +4,73 @@ use futures::Future;
 use std::error::Error;
 
 use crate::db;
-use crate::models::NewSubscriber;
+use crate::models::NewAddress;
 use crate::AppState;
 
-pub fn show_subscriber(
-    subscriber_id: web::Path<i32>,
+pub fn show_address(
+    address_id: web::Path<i32>,
     state: web::Data<AppState>,
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
     state
         .db
-        .send(db::subscriber::FetchSubscriber(subscriber_id.into_inner()))
+        .send(db::address::FetchAddress(address_id.into_inner()))
         .from_err()
         .and_then(move |res| match res {
-            Ok(subscriber) => Ok(HttpResponse::Ok().json(subscriber)),
+            Ok(address) => Ok(HttpResponse::Ok().json(address)),
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
         })
 }
 
-pub fn list_subscribers(
+pub fn list_addresses(
     q: web::Query<db::pagination::PaginateQuery>,
     state: web::Data<AppState>,
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
     state
         .db
-        .send(db::subscriber::FetchSubscribers {
+        .send(db::address::FetchAddresses {
             page: q.page.unwrap_or(1),
             per_page: q.per_page.unwrap_or(10),
         })
         .from_err()
         .and_then(move |res| match res {
-            Ok(subs) => Ok(HttpResponse::Ok().json(subs)),
+            Ok(addresses) => Ok(HttpResponse::Ok().json(addresses)),
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
         })
 }
 
-pub fn create_new_subscriber(
-    req: web::Json<NewSubscriber>,
+pub fn create_new_address(
+    req: web::Json<NewAddress>,
     state: web::Data<AppState>,
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
     state
         .db
-        .send(db::subscriber::InsertSubscriber(req.into_inner()))
+        .send(db::address::InsertAddress(req.into_inner()))
         .from_err()
         .and_then(move |res| match res {
-            Ok(new_sub) => Ok(HttpResponse::Ok().json(new_sub)),
+            Ok(new_address) => Ok(HttpResponse::Ok().json(new_address)),
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
         })
 }
 
-pub fn update_subscriber(
-    (subscriber_id, subscriber_form): (
-        web::Path<i32>,
-        web::Json<NewSubscriber>,
-    ),
+pub fn update_address(
+    (address_id, address): (web::Path<i32>, web::Json<NewAddress>),
     state: web::Data<AppState>,
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
     state
         .db
-        .send(db::subscriber::UpdateSubscriber {
-            subscriber_id: subscriber_id.into_inner(),
-            subscriber: subscriber_form.into_inner(),
+        .send(db::address::UpdateAddress {
+            address_id: address_id.into_inner(),
+            address: address.into_inner(),
         })
         .from_err()
         .and_then(move |res| match res {
-            Ok(updated_subscriber) => {
-                Ok(HttpResponse::Ok().json(updated_subscriber))
-            }
+            Ok(updated_address) => Ok(HttpResponse::Ok().json(updated_address)),
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }

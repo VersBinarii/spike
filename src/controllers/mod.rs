@@ -1,3 +1,4 @@
+pub mod address;
 pub mod mna;
 pub mod number;
 pub mod rsp;
@@ -5,7 +6,7 @@ pub mod session;
 pub mod subscriber;
 
 use actix::prelude::Addr;
-use actix_web::{web, Error as ActixErr};
+use actix_web::{web, Error as ActixErr, HttpRequest};
 use futures::{future::ok, Future};
 
 use crate::db;
@@ -14,7 +15,11 @@ pub struct AppState {
 }
 
 pub fn dummy(
+    req: HttpRequest,
     _: web::Data<AppState>,
-) -> impl Future<Item = &'static str, Error = ActixErr> {
-    ok("I'm a dummy route handler")
+) -> impl Future<Item = String, Error = ActixErr> {
+    ok(format!(
+        "I'm a dummy route handler for path: {}",
+        req.path()
+    ))
 }

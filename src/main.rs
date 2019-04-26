@@ -15,7 +15,9 @@ mod models;
 mod schema;
 mod utils;
 
-use crate::controllers::{mna, number, rsp, session, AppState};
+use crate::controllers::{
+    address, mna, number, rsp, session, subscriber, AppState,
+};
 
 fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
@@ -77,6 +79,34 @@ fn main() -> std::io::Result<()> {
                 web::resource("/rsp/{id}")
                     .route(web::get().to_async(rsp::show_rsp))
                     .route(web::put().to_async(rsp::update_rsp))
+                    .route(web::delete().to_async(controllers::dummy)),
+            )
+            .service(
+                web::resource("/rsp/{id}/subscribers")
+                    .route(web::get().to_async(controllers::dummy)),
+            )
+            .service(
+                web::resource("/subscriber")
+                    .route(web::get().to_async(subscriber::list_subscribers))
+                    .route(
+                        web::post().to_async(subscriber::create_new_subscriber),
+                    ),
+            )
+            .service(
+                web::resource("/subscriber/{id}")
+                    .route(web::get().to_async(subscriber::show_subscriber))
+                    .route(web::put().to_async(subscriber::update_subscriber))
+                    .route(web::delete().to_async(controllers::dummy)),
+            )
+            .service(
+                web::resource("/address")
+                    .route(web::get().to_async(address::list_addresses))
+                    .route(web::post().to_async(address::create_new_address)),
+            )
+            .service(
+                web::resource("/address/{id}")
+                    .route(web::get().to_async(address::show_address))
+                    .route(web::put().to_async(address::update_address))
                     .route(web::delete().to_async(controllers::dummy)),
             )
             .default_service(web::route().to(|| HttpResponse::NotFound()))
