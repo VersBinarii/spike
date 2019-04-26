@@ -23,7 +23,6 @@ impl Handler<FetchUser> for DbExecutor {
         _: &mut Self::Context,
     ) -> Self::Result {
         use crate::schema::users::dsl::*;
-        println!("{:?}", msg);
         match users
             .filter(username.eq(msg.username))
             .limit(1)
