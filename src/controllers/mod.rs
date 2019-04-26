@@ -1,6 +1,8 @@
 pub mod mna;
 pub mod number;
+pub mod rsp;
 pub mod session;
+pub mod subscriber;
 
 use actix::prelude::Addr;
 use actix_web::{web, Error as ActixErr, HttpResponse};

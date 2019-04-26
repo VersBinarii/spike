@@ -15,7 +15,7 @@ mod models;
 mod schema;
 mod utils;
 
-use crate::controllers::{mna, number, session, AppState};
+use crate::controllers::{mna, number, rsp, session, AppState};
 
 fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
@@ -67,6 +67,17 @@ fn main() -> std::io::Result<()> {
             .service(
                 web::resource("/mna/{id}/numbers")
                     .route(web::get().to_async(mna::show_numbers_per_mna)),
+            )
+            .service(
+                web::resource("/rsp")
+                    .route(web::get().to_async(rsp::list_rsp))
+                    .route(web::post().to_async(rsp::create_new_rsp)),
+            )
+            .service(
+                web::resource("/rsp/{id}")
+                    .route(web::get().to_async(rsp::show_rsp))
+                    .route(web::put().to_async(rsp::update_rsp))
+                    .route(web::delete().to_async(controllers::dummy)),
             )
             .default_service(web::route().to(|| HttpResponse::NotFound()))
     })

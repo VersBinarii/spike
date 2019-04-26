@@ -80,12 +80,21 @@ pub struct Subscriber {
     last_name: Option<String>,
 }
 
+#[derive(Debug, Insertable, AsChangeset, Deserialize)]
+#[table_name = "rsp"]
+#[primary_key(rsp_id)]
+pub struct NewRsp {
+    address_id: Option<i32>,
+    name: String,
+    account: Option<String>,
+}
+
 #[derive(Queryable, Serialize, Deserialize)]
 pub struct Rsp {
     rsp_id: i32,
     address_id: Option<i32>,
     name: String,
-    accountid: Option<String>,
+    account: Option<String>,
 }
 
 #[derive(Queryable, Serialize, Deserialize)]
