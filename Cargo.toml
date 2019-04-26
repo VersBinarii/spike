@@ -1,5 +1,5 @@
 [package]
-name = "spike_rs"
+name = "spike-api"
 version = "0.1.0"
 authors = ["Krzysztof Grobelak <krzysztof.grobelak@gmail.com>"]
 edition = "2018"
