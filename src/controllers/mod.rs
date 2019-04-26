@@ -5,8 +5,8 @@ pub mod session;
 pub mod subscriber;
 
 use actix::prelude::Addr;
-use actix_web::{web, Error as ActixErr, HttpResponse};
-use futures::Future;
+use actix_web::{web, Error as ActixErr};
+use futures::{future::ok, Future};
 
 use crate::db;
 pub struct AppState {
@@ -14,17 +14,7 @@ pub struct AppState {
 }
 
 pub fn dummy(
-    state: web::Data<AppState>,
-) -> impl Future<Item = HttpResponse, Error = ActixErr> {
-    state
-        .db
-        .send(db::number::FetchNumbers {
-            page: 1,
-            per_page: 10,
-        })
-        .from_err()
-        .and_then(move |res| match res {
-            Ok(numbers) => Ok(HttpResponse::Ok().json(numbers)),
-            Err(_) => Ok(HttpResponse::InternalServerError().into()),
-        })
+    _: web::Data<AppState>,
+) -> impl Future<Item = &'static str, Error = ActixErr> {
+    ok("I'm a dummy route handler")
 }
