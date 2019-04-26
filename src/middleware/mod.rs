@@ -14,14 +14,12 @@ pub struct CheckAuth;
 
 impl<S, B> Transform<S> for CheckAuth
 where
-    //S: Service<Request = ServiceRequest, Response = ServiceResponse<B>>,
     S: Service<
         Request = ServiceRequest,
         Response = ServiceResponse<B>,
         Error = Error,
     >,
     S: 'static,
-    S::Future: 'static,
     B: 'static,
 {
     type Request = ServiceRequest;
@@ -43,15 +41,12 @@ pub struct CheckAuthMiddleware<S> {
 
 impl<S, B> Service for CheckAuthMiddleware<S>
 where
-    //S: Service<Request = ServiceRequest, Response = ServiceResponse<B>>,
     S: Service<
         Request = ServiceRequest,
         Response = ServiceResponse<B>,
         Error = Error,
     >,
-    S::Future: 'static,
     S: 'static,
-    Error: From<S::Error>,
     B: 'static,
 {
     type Request = ServiceRequest;
@@ -88,6 +83,7 @@ where
             //You can access the login even when not being authenticated
             Box::new(service.call(req).map_err(Error::from))
         } else {
+            //TODO: Need a custom error for this
             Box::new(ok(req.error_response(ErrorBadRequest(
                 "Required headers are missing.",
             ))))
