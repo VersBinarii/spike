@@ -109,8 +109,16 @@ CREATE TABLE tokens(
 );
 
 
-INSERT INTO number_type(number_type_id, number_type_name) VALUES(1, 'GEO');
+INSERT INTO number_type(number_type_id, number_type_name)
+	   VALUES(1, 'GEO'), (2, 'NON-GEO'), (3, 'VoIP');
+
 INSERT INTO number_status(number_status_id, number_status_name)
-	   VALUES(1, 'Available');
+	   VALUES (1, 'AVAILABLE'), (2, 'RESERVED'), (3, 'ASSIGNED'),
+	   (4, 'QUARANTINED'), (5, 'PORT_PENDING'), (6, 'PORTED_IN'),
+	   (7, 'PORTED_OUT');
+
+INSERT INTO porting_status(porting_status_id, porting_status_name)
+	   VALUES (1, 'PORTING_START'), (2, 'PORTING_SUCCESS'), (3, 'PORTING_REJECT');
+	   
 INSERT INTO mna(mna_id, area_code, digits, description, towns, area)
 	   VALUES(1, '15', 4, 'Dublin Central', 'Dublin', '');

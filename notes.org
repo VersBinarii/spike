@@ -1,39 +1,76 @@
-* Design notes
+* Spike API
 
-** Number blocks
-Number blocks and DDIs are going to be treated interchangeably.
-Bloc are allowed only in powers of 10 (1, 10, 100) etc. 
-If 3 number are requested then 3 blocks of 1 are created, for 32 numbers 3 blocks of 10 
-and 2 blocks of 1 are created etc... 
-
+* Number blocks
+** Number blocks and DDIs are going to be treated interchangeably.
+** Bloc are allowed only in powers of 10 (1, 10, 100) etc. 
+** If 3 number are requested then 3 blocks of 1 are created, for 32 numbers 3 blocks of 10  and 2 blocks of 1 are created etc... 
 
 
-** API
 
-*** Assumptions
+* API
+
+** Assumptions
 Each API endpoint will support pagination (where applicable).
 
-*** Number
+** Authentication
+In order to authenticate a `POST` request needs to be made to the `/login` endpoint.
+
+#+BEGIN_SRC bash
+curl -XPOST -H 'Content-Type: application/json' -d'{"username": "admin", "password":"admin"}' 'http://localhost:9080/login'
+#+END_SRC
+
+The response will contain an authentication token that needs to be included 
+into every ubsequent call. I.e.: 
+
+#+BEGIN_SRC bash
+curl -XGET -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:8080/mna'
+#+END_SRC
+
+** Number
 GET numbers - list all
+#+BEGIN_SRC bash
+curl -XGET -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/numbers'
+#+END_SRC
+
 GET numbers/:id - info on number id
+#+BEGIN_SRC bash
+curl -XGET -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/numbers/1'
+#+END_SRC
+
 POST numbers - create number
+#+BEGIN_SRC bash
+curl -XPOST -H 'Content-Type: application/json' -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/numbers' \ 
+-d'{"number": "4567890", "number_type_id": 1, "number_status_id":1, "mna_id": 1, "wlr": false, "is_main_number": false, "ecas":false}'
+#+END_SRC
+
 PUT numbers/:id - Update number
+#+BEGIN_SRC bash
+curl -XPUT -H 'Content-Type: application/json' -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/numbers' \ 
+-d'{"number": "4567890", "number_type_id": 1, "number_status_id":1, "mna_id": 1, "wlr": false, "is_main_number": true, "ecas":true}'
+#+END_SRC
+
+*** Unimplemented: 
 DELETE numbers/:id
 GET numbers/new - find new available number
 GET numbers/:id/status - show the status of the number
 GET numbers/search - lookup numbers
 
-*** MNA
+
+** MNA
 GET mna - list all MNAs
 GET mna/:id - retrive single MNA
-GET mna/:id/numbers - list all numbers for this MNA
 POST mna - create new MNA
 PUT mna/:id - update MNA
+
+*** Unimplemented:
+GET mna/:id/numbers - list all numbers for this MNA
 DELETE mna/:id - delete MNA
 
-*** RSP
-GET rsp - list all RSPs
-*** Subscriber
 
-*** Porting
+** RSP
+GET rsp - list all RSPs
+** Subscriber
+
+** Address
+** Porting
 
