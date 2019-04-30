@@ -1,14 +1,4 @@
 -- Your SQL goes here
-CREATE TABLE number_type(
-	   number_type_id SERIAL PRIMARY KEY,
-	   number_type_name TEXT NOT NULL
-);
-
-CREATE TABLE number_status(
-	   number_status_id SERIAL PRIMARY KEY,
-	   number_status_name TEXT NOT NULL
-);
-
 CREATE TABLE porting_status(
 	   porting_status_id SERIAL PRIMARY KEY,
 	   porting_status_name TEXT NOT NULL
@@ -68,8 +58,8 @@ CREATE TABLE number_blocks(
 CREATE TABLE numbers (
 	   number_id SERIAL PRIMARY KEY,
 	   number TEXT NOT NULL UNIQUE,
-	   number_type_id INTEGER REFERENCES number_type(number_type_id) NOT NULL,
-	   number_status_id INTEGER REFERENCES number_status(number_status_id) NOT NULL,
+	   number_type INTEGER NOT NULL,
+	   number_status INTEGER NOT NULL,
 	   prefix_id INTEGER REFERENCES routing_prefix(prefix_id),
 	   status_change timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	   block_holder TEXT,
@@ -107,15 +97,6 @@ CREATE TABLE tokens(
 	   username TEXT NOT NULL,
 	   expiry timestamp WITH TIME ZONE NOT NULL
 );
-
-
-INSERT INTO number_type(number_type_id, number_type_name)
-	   VALUES(1, 'GEO'), (2, 'NON-GEO'), (3, 'VoIP');
-
-INSERT INTO number_status(number_status_id, number_status_name)
-	   VALUES (1, 'AVAILABLE'), (2, 'RESERVED'), (3, 'ASSIGNED'),
-	   (4, 'QUARANTINED'), (5, 'PORT_PENDING'), (6, 'PORTED_IN'),
-	   (7, 'PORTED_OUT');
 
 INSERT INTO porting_status(porting_status_id, porting_status_name)
 	   VALUES (1, 'PORTING_START'), (2, 'PORTING_SUCCESS'), (3, 'PORTING_REJECT');

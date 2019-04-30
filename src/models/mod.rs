@@ -1,68 +1,12 @@
 use crate::schema::*;
 use chrono::NaiveDateTime;
 
-#[derive(Debug, Insertable, AsChangeset, Deserialize)]
-#[table_name = "numbers"]
-#[primary_key(number_id)]
-pub struct NewNumber {
-    number: String,
-    number_type_id: i32,
-    number_status_id: i32,
-    prefix_id: Option<i32>,
-    status_change: Option<NaiveDateTime>,
-    block_holder: Option<String>,
-    comments: Option<String>,
-    mna_id: i32,
-    subscriber_id: Option<i32>,
-    numberblock_id: Option<i32>,
-    wlr: bool,
-    is_main_number: bool,
-    ecas: bool,
-    ndd: bool,
-}
-
-#[derive(Debug, Queryable, Associations, Serialize)]
-#[belongs_to(Mna)]
-pub struct Number {
-    number_id: i32,
-    number: String,
-    number_type_id: i32,
-    number_status_id: i32,
-    prefix_id: Option<i32>,
-    status_change: Option<NaiveDateTime>,
-    block_holder: Option<String>,
-    comments: Option<String>,
-    mna_id: i32,
-    subscriber_id: Option<i32>,
-    numberblock_id: Option<i32>,
-    wlr: bool,
-    is_main_number: bool,
-    ecas: bool,
-    ndd: bool,
-}
+pub mod number;
+pub mod porting;
 
 #[derive(Queryable, Serialize, Deserialize)]
 pub struct NumberBlock {
     numberblock_id: i32,
-}
-
-#[derive(Queryable, Serialize, Deserialize)]
-pub struct Porting {
-    porting_id: i32,
-    number_id: i32,
-    porting_from: String,
-    porting_to: String,
-    porting_status_id: i32,
-    porting_start: NaiveDateTime,
-    porting_event_date: Option<NaiveDateTime>,
-    porting_completion: Option<NaiveDateTime>,
-    comments: Option<String>,
-}
-
-#[derive(Queryable, Serialize, Deserialize)]
-pub struct PortingStatus {
-    porting_status_id: i32,
-    porting_status: String,
 }
 
 #[derive(Debug, Insertable, AsChangeset, Deserialize)]
@@ -144,18 +88,6 @@ pub struct Address {
 pub struct RoutingPrefix {
     prefix_id: i32,
     prefix: String,
-}
-
-#[derive(Queryable, Serialize, Deserialize)]
-pub struct NumberType {
-    number_type_id: i32,
-    number_type: String,
-}
-
-#[derive(Queryable, Serialize, Deserialize)]
-pub struct NumberStatus {
-    number_status_id: i32,
-    number_status: String,
 }
 
 #[derive(Debug, Insertable, AsChangeset, Deserialize)]

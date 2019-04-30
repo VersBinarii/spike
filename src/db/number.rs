@@ -9,11 +9,11 @@ use crate::utils::SpikeError;
 pub struct FetchNumber(pub i32);
 
 impl Message for FetchNumber {
-    type Result = Result<models::Number, SpikeError>;
+    type Result = Result<models::number::Number, SpikeError>;
 }
 
 impl Handler<FetchNumber> for DbExecutor {
-    type Result = Result<models::Number, SpikeError>;
+    type Result = Result<models::number::Number, SpikeError>;
 
     fn handle(
         &mut self,
@@ -25,7 +25,7 @@ impl Handler<FetchNumber> for DbExecutor {
         match numbers
             .filter(number_id.eq(msg.0))
             .limit(1)
-            .load::<models::Number>(&self.pool.get()?)
+            .load::<models::number::Number>(&self.pool.get()?)
         {
             Ok(mut nums) => {
                 if let Some(num) = nums.pop() {
@@ -45,11 +45,11 @@ pub struct FetchNumbers {
 }
 
 impl Message for FetchNumbers {
-    type Result = Result<(Vec<models::Number>, i64), SpikeError>;
+    type Result = Result<(Vec<models::number::Number>, i64), SpikeError>;
 }
 
 impl Handler<FetchNumbers> for DbExecutor {
-    type Result = Result<(Vec<models::Number>, i64), SpikeError>;
+    type Result = Result<(Vec<models::number::Number>, i64), SpikeError>;
     fn handle(
         &mut self,
         msg: FetchNumbers,
@@ -61,7 +61,7 @@ impl Handler<FetchNumbers> for DbExecutor {
             .select(numbers::all_columns())
             .paginate(msg.page)
             .per_page(msg.per_page)
-            .load_and_count_pages::<models::Number>(&*self.pool.get()?)
+            .load_and_count_pages::<models::number::Number>(&*self.pool.get()?)
         {
             Ok(nums) => Ok(nums),
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),
@@ -69,14 +69,14 @@ impl Handler<FetchNumbers> for DbExecutor {
     }
 }
 
-pub struct InsertNumber(pub models::NewNumber);
+pub struct InsertNumber(pub models::number::NewNumber);
 
 impl Message for InsertNumber {
-    type Result = Result<models::Number, SpikeError>;
+    type Result = Result<models::number::Number, SpikeError>;
 }
 
 impl Handler<InsertNumber> for DbExecutor {
-    type Result = Result<models::Number, SpikeError>;
+    type Result = Result<models::number::Number, SpikeError>;
     fn handle(
         &mut self,
         msg: InsertNumber,
@@ -95,16 +95,16 @@ impl Handler<InsertNumber> for DbExecutor {
 }
 
 pub struct UpdateNumber {
-    pub number: models::NewNumber,
+    pub number: models::number::NewNumber,
     pub number_id: i32,
 }
 
 impl Message for UpdateNumber {
-    type Result = Result<models::Number, SpikeError>;
+    type Result = Result<models::number::Number, SpikeError>;
 }
 
 impl Handler<UpdateNumber> for DbExecutor {
-    type Result = Result<models::Number, SpikeError>;
+    type Result = Result<models::number::Number, SpikeError>;
     fn handle(
         &mut self,
         msg: UpdateNumber,

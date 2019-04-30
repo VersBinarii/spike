@@ -128,11 +128,13 @@ pub struct ShowNumbersMna {
 }
 
 impl Message for ShowNumbersMna {
-    type Result = Result<(Vec<(models::Mna, models::Number)>, i64), SpikeError>;
+    type Result =
+        Result<(Vec<(models::Mna, models::number::Number)>, i64), SpikeError>;
 }
 
 impl Handler<ShowNumbersMna> for DbExecutor {
-    type Result = Result<(Vec<(models::Mna, models::Number)>, i64), SpikeError>;
+    type Result =
+        Result<(Vec<(models::Mna, models::number::Number)>, i64), SpikeError>;
     fn handle(
         &mut self,
         msg: ShowNumbersMna,
@@ -148,7 +150,7 @@ impl Handler<ShowNumbersMna> for DbExecutor {
             .select((mna::all_columns(), numbers::all_columns()))
             .paginate(msg.page)
             .per_page(msg.per_page)
-            .load_and_count_pages::<(models::Mna, models::Number)>(
+            .load_and_count_pages::<(models::Mna, models::number::Number)>(
                 &*self.pool.get()?,
             ) {
             Ok(updated_mna) => Ok(updated_mna),

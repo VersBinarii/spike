@@ -4,7 +4,7 @@ use futures::Future;
 use std::error::Error;
 
 use crate::db::{self, pagination::PaginateResponse};
-use crate::models::{Mna, NewMna, Number};
+use crate::models::{number::Number, Mna, NewMna};
 use crate::AppState;
 
 pub fn list_mna(

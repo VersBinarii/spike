@@ -4,7 +4,7 @@ use futures::Future;
 use std::error::Error;
 
 use crate::db;
-use crate::models::NewNumber;
+use crate::models::number::NewNumber;
 use crate::AppState;
 
 pub fn list_numbers(
