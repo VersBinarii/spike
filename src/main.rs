@@ -5,7 +5,9 @@ extern crate serde_derive;
 
 use actix::prelude::SyncArbiter;
 use actix_web::{
-    middleware::Logger as RequestLogger, web, App, HttpResponse, HttpServer,
+    self,
+    middleware::{Compress, Logger as RequestLogger},
+    web, App, HttpResponse, HttpServer,
 };
 
 use crate::controllers::AppState;
@@ -14,12 +16,13 @@ mod controllers;
 mod db;
 mod middleware;
 mod models;
+mod response;
 mod router;
 mod schema;
 mod utils;
 
 fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_web=info");
+    std::env::set_var("RUST_LOG", "actix_web=trace");
     env_logger::init();
 
     let runner = actix::System::new("Spike - API server");
@@ -33,6 +36,7 @@ fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(AppState { db: addr.clone() })
+            .wrap(Compress::default())
             .wrap(RequestLogger::default())
             .wrap(middleware::CheckAuth)
             .configure(router::config_routes)

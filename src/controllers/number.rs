@@ -5,6 +5,7 @@ use std::error::Error;
 
 use crate::db;
 use crate::models::number::NewNumber;
+use crate::response::SpikeResponse;
 use crate::AppState;
 
 pub fn list_numbers(
@@ -19,7 +20,9 @@ pub fn list_numbers(
         })
         .from_err()
         .and_then(move |res| match res {
-            Ok(numbers) => Ok(HttpResponse::Ok().json(numbers)),
+            Ok(numbers) => {
+                Ok(HttpResponse::Ok().json(SpikeResponse::from_data(numbers)))
+            }
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
@@ -30,12 +33,18 @@ pub fn create_new_number(
     req: web::Json<NewNumber>,
     state: web::Data<AppState>,
 ) -> impl Future<Item = HttpResponse, Error = ActixErr> {
+    let new_number = req.into_inner();
+    //Check that the MNA is set if its a Geo number
+    //if
     state
         .db
-        .send(db::number::InsertNumber(req.into_inner()))
+        .send(db::number::InsertNumber(new_number))
         .from_err()
         .and_then(move |res| match res {
-            Ok(new_number) => Ok(HttpResponse::Ok().json(new_number)),
+            Ok(new_number) => {
+                Ok(HttpResponse::Ok()
+                    .json(SpikeResponse::from_data(new_number)))
+            }
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
@@ -54,7 +63,8 @@ pub fn update_number(
         })
         .from_err()
         .and_then(move |res| match res {
-            Ok(updated_number) => Ok(HttpResponse::Ok().json(updated_number)),
+            Ok(updated_number) => Ok(HttpResponse::Ok()
+                .json(SpikeResponse::from_data(updated_number))),
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
@@ -70,7 +80,9 @@ pub fn show_number(
         .send(db::number::FetchNumber(number_id.into_inner()))
         .from_err()
         .and_then(move |res| match res {
-            Ok(number) => Ok(HttpResponse::Ok().json(number)),
+            Ok(number) => {
+                Ok(HttpResponse::Ok().json(SpikeResponse::from_data(number)))
+            }
             Err(e) => {
                 Ok(HttpResponse::InternalServerError().json(e.description()))
             }
