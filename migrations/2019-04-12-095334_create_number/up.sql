@@ -1,9 +1,4 @@
 -- Your SQL goes here
-CREATE TABLE porting_status(
-	   porting_status_id SERIAL PRIMARY KEY,
-	   porting_status_name TEXT NOT NULL
-);
-
 CREATE TABLE routing_prefix(
 	   prefix_id SERIAL PRIMARY KEY,
 	   prefix TEXT NOT NULL
@@ -79,7 +74,7 @@ CREATE TABLE portings(
 	   numberblock_id INTEGER REFERENCES number_blocks(numberblock_id),
 	   porting_from TEXT NOT NULL,
 	   porting_to TEXT NOT NULL,
-	   porting_status_id INTEGER REFERENCES porting_status(porting_status_id),
+	   porting_status INTEGER NOT NULL,
 	   porting_start timestamp WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	   porting_event_date timestamp WITH TIME ZONE,
 	   porting_completion timestamp WITH TIME ZONE,
@@ -98,8 +93,5 @@ CREATE TABLE tokens(
 	   expiry timestamp WITH TIME ZONE NOT NULL
 );
 
-INSERT INTO porting_status(porting_status_id, porting_status_name)
-	   VALUES (1, 'PORTING_START'), (2, 'PORTING_SUCCESS'), (3, 'PORTING_REJECT');
-	   
 INSERT INTO mna(mna_id, area_code, digits, description, towns, area)
 	   VALUES(1, '15', 4, 'Dublin Central', 'Dublin', '');

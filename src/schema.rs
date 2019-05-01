@@ -63,6 +63,7 @@ table! {
         numberblock_id -> Nullable<Int4>,
         porting_from -> Text,
         porting_to -> Text,
+        donor_account_id -> Text,
         status -> Int4,
         porting_start -> Timestamptz,
         porting_event_date -> Nullable<Timestamptz>,
