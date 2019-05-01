@@ -32,7 +32,7 @@ impl Handler<FetchUser> for DbExecutor {
                 if let Some(the_user) = fetched_user.pop() {
                     Ok(the_user)
                 } else {
-                    Err(SpikeError::InvalidId)
+                    Err(SpikeError::ObjectNotFound)
                 }
             }
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),

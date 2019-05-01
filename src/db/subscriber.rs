@@ -31,7 +31,7 @@ impl Handler<FetchSubscriber> for DbExecutor {
                 if let Some(the_rsp) = ret_rsp.pop() {
                     Ok(the_rsp)
                 } else {
-                    Err(SpikeError::InvalidId)
+                    Err(SpikeError::ObjectNotFound)
                 }
             }
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),

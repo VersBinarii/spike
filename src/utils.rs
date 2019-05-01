@@ -1,10 +1,8 @@
-use actix_web::{error::ResponseError, http::StatusCode, web::HttpResponse};
-
 #[derive(Debug)]
 pub enum SpikeError {
     DatabaseConnectionError(r2d2::Error),
     DatabaseQueryError(diesel::result::Error),
-    InvalidId,
+    ObjectNotFound,
 }
 
 impl std::fmt::Display for SpikeError {
@@ -13,7 +11,7 @@ impl std::fmt::Display for SpikeError {
         match *self {
             DatabaseConnectionError(ref e) => e.fmt(fmt),
             DatabaseQueryError(ref e) => e.fmt(fmt),
-            InvalidId => write!(fmt, "The specified Id is invalid"),
+            ObjectNotFound => write!(fmt, "Could not find requested object."),
         }
     }
 }
@@ -24,7 +22,7 @@ impl std::error::Error for SpikeError {
         match *self {
             DatabaseConnectionError(ref e) => e.description(),
             DatabaseQueryError(ref e) => e.description(),
-            InvalidId => "Specified ID is invalid",
+            ObjectNotFound => "Could not find requested object.",
         }
     }
 
@@ -47,14 +45,5 @@ impl std::convert::From<r2d2::Error> for SpikeError {
 impl std::convert::From<diesel::result::Error> for SpikeError {
     fn from(error: diesel::result::Error) -> Self {
         SpikeError::DatabaseQueryError(error)
-    }
-}
-
-impl ResponseError for SpikeError {
-    fn error_response(&self) -> HttpResponse {
-        HttpResponse::with_body(
-            StatusCode::BAD_REQUEST,
-            format!("{}", self).into(),
-        )
     }
 }

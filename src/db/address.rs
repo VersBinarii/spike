@@ -31,7 +31,7 @@ impl Handler<FetchAddress> for DbExecutor {
                 if let Some(the_address) = ret_address.pop() {
                     Ok(the_address)
                 } else {
-                    Err(SpikeError::InvalidId)
+                    Err(SpikeError::ObjectNotFound)
                 }
             }
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),

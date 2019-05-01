@@ -31,7 +31,7 @@ impl Handler<FetchNumber> for DbExecutor {
                 if let Some(num) = nums.pop() {
                     Ok(num)
                 } else {
-                    Err(SpikeError::InvalidId)
+                    Err(SpikeError::ObjectNotFound)
                 }
             }
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),

@@ -27,7 +27,7 @@ impl Handler<FetchMna> for DbExecutor {
                 if let Some(the_mna) = fetched_mna.pop() {
                     Ok(the_mna)
                 } else {
-                    Err(SpikeError::InvalidId)
+                    Err(SpikeError::ObjectNotFound)
                 }
             }
             Err(e) => Err(SpikeError::DatabaseQueryError(e)),
