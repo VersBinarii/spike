@@ -40,13 +40,13 @@ curl -XGET -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/n
 POST numbers - create number
 #+BEGIN_SRC bash
 curl -XPOST -H 'Content-Type: application/json' -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/numbers' \ 
--d'{"number": "4567890", "number_type_id": 1, "number_status_id":1, "mna_id": 1, "wlr": false, "is_main_number": false, "ecas":false}'
+-d'{"number": "4567890", "number_type": "NonGeo", "number_status": "Available", "mna_id": 1, "wlr": false, "is_main_number": false, "ecas":false}'
 #+END_SRC
 
 PUT numbers/:id - Update number
 #+BEGIN_SRC bash
 curl -XPUT -H 'Content-Type: application/json' -H 'token: 4984f8116c364679aebb952a60f092e5' 'http://localhost:9080/numbers' \ 
--d'{"number": "4567890", "number_type_id": 1, "number_status_id":1, "mna_id": 1, "wlr": false, "is_main_number": true, "ecas":true}'
+-d'{"number": "4567890", "number_type": "Geo", "number_status":"Assigned", "mna_id": 1, "wlr": false, "is_main_number": true, "ecas":true}'
 #+END_SRC
 
 *** Unimplemented: 
