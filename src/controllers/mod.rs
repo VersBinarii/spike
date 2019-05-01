@@ -1,6 +1,7 @@
 pub mod address;
 pub mod mna;
 pub mod number;
+pub mod porting;
 pub mod rsp;
 pub mod session;
 pub mod subscriber;

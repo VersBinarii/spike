@@ -1,6 +1,7 @@
+use crate::models::number::Number;
 use crate::schema::*;
-use chrono::NaiveDateTime;
 
+use chrono::NaiveDateTime;
 use diesel::{
     backend::Backend,
     deserialize::{self, FromSql},
@@ -26,7 +27,7 @@ impl From<i32> for PortingStatus {
             1 => PortingStatus::PortingStart,
             2 => PortingStatus::PortingComplete,
             3 => PortingStatus::PortingRejected,
-            _n => panic!("Unknown type"),
+            _ => panic!("Unknown type"),
         }
     }
 }
@@ -63,7 +64,8 @@ impl FromSql<Integer, Pg> for PortingStatus {
 #[table_name = "portings"]
 #[primary_key(porting_id)]
 pub struct NewPorting {
-    number_id: i32,
+    number_id: Option<i32>,
+    numberblock_id: Option<i32>,
     porting_from: String,
     porting_to: String,
     status: PortingStatus,
@@ -73,10 +75,12 @@ pub struct NewPorting {
     comments: Option<String>,
 }
 
-#[derive(Debug, Queryable, Serialize)]
+#[derive(Debug, Queryable, Associations, Serialize)]
+#[belongs_to(Number)]
 pub struct Porting {
     porting_id: i32,
-    number_id: i32,
+    number_id: Option<i32>,
+    numberblock_id: Option<i32>,
     porting_from: String,
     porting_to: String,
     status: PortingStatus,

@@ -1,7 +1,7 @@
 use actix_web::web;
 
 use crate::controllers::{
-    self, address, mna, number, rsp, session, subscriber,
+    self, address, mna, number, porting, rsp, session, subscriber,
 };
 
 pub fn config_routes(cfg: &mut web::ServiceConfig) {
@@ -73,5 +73,16 @@ pub fn config_routes(cfg: &mut web::ServiceConfig) {
             .route(web::get().to_async(address::show_address))
             .route(web::put().to_async(address::update_address))
             .route(web::delete().to_async(controllers::dummy)),
-    );
+    )
+    .service(
+        web::resource("/portings")
+            .route(web::get().to_async(porting::list_portings))
+            .route(web::post().to_async(porting::create_new_porting)),
+    )
+    .service(
+        web::resource("/portings/{id}")
+            .route(web::get().to_async(porting::show_porting))
+            .route(web::put().to_async(porting::update_porting))
+            .route(web::delete().to_async(controllers::dummy)),
+    );;
 }
